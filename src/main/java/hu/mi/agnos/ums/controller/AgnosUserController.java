@@ -9,18 +9,17 @@ import hu.mi.agnos.user.converter.AgnosUserConverter;
 import hu.mi.agnos.user.entity.dao.AgnosDAOUser;
 import hu.mi.agnos.user.entity.dto.AgnosDTOUser;
 import hu.mi.agnos.user.repository.AgnosUserPropertyRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Optional;
+import javax.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -61,10 +60,10 @@ public class AgnosUserController {
     }
 
     @PutMapping("/user/{name}")
-    ResponseEntity<AgnosDTOUser> updateUser(@Valid @RequestBody AgnosDTOUser user) {
-        log.info("Request to update AgnosUser: {}", user);
+    ResponseEntity<AgnosDTOUser> updateUser(@Valid @RequestBody AgnosDTOUser user, @PathVariable String userName) {
+        log.info("Request to update AgnosUser: {}", user.getName());
         AgnosDAOUser daoUser = AgnosUserConverter.dto2dao(user);
-        Optional<AgnosDTOUser> result = AgnosUserConverter.dao2dto(userRepo.save(daoUser));
+        Optional<AgnosDTOUser> result = AgnosUserConverter.dao2dto(userRepo.save(userName, daoUser));
         return ResponseEntity.ok().body(result.get());
     }
 
