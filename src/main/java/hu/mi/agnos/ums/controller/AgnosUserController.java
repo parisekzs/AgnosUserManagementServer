@@ -59,7 +59,7 @@ public class AgnosUserController {
                 .body(result.get());
     }
 
-    @PutMapping("/user/{name}")
+    @PutMapping("/user/{userName}")
     ResponseEntity<AgnosDTOUser> updateUser(@Valid @RequestBody AgnosDTOUser user, @PathVariable String userName) {
         log.info("Request to update AgnosUser: {}", user.getName());
         AgnosDAOUser daoUser = AgnosUserConverter.dto2dao(user);
@@ -67,7 +67,7 @@ public class AgnosUserController {
         return ResponseEntity.ok().body(result.get());
     }
 
-    @DeleteMapping("/user/{name}")
+    @DeleteMapping("/user/{userName}")
     public ResponseEntity<?> deleteUser(@PathVariable String userName) {
         log.info("Request to delete AgnosUser: {}", userName);
         userRepo.deleteById(userName);

@@ -69,9 +69,9 @@ public class AgnosRoleController {
     }
 
     @DeleteMapping("/role/{name}")
-    public ResponseEntity<?> deleteRole(@PathVariable String roleName) {
-        log.info("Request to delete AgnosRole: {}", roleName);
-        roleRepo.deleteById(roleName);
+    public ResponseEntity<?> deleteRole(@PathVariable String name) {
+        log.info("Request to delete AgnosRole: {}", name);
+        roleRepo.deleteById(name);
         return ResponseEntity.ok().build();
     }
 }
