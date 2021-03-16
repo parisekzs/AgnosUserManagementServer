@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package hu.mi.agnos.ums.controller;
+package hu.mi.ums.controller;
 
-import hu.mi.agnos.user.converter.AgnosUserConverter;
-import hu.mi.agnos.user.entity.dao.AgnosDAOUser;
-import hu.mi.agnos.user.entity.dto.AgnosDTOUser;
-import hu.mi.agnos.user.repository.AgnosUserPropertyRepository;
+import hu.mi.user.properties.converter.UserConverter;
+import hu.mi.user.properties.entity.User;
+import hu.mi.user.properties.model.UserDTO;
+import hu.mi.user.properties.repository.UserRepo;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -27,43 +27,42 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/aums")
-public class AgnosUserController {
+public class UserController {
 
-    
-    private final Logger log = LoggerFactory.getLogger(AgnosUserController.class);
+    private final Logger log = LoggerFactory.getLogger(UserController.class);
 
-     @Autowired
-    private AgnosUserPropertyRepository userRepo;
+    @Autowired
+    private UserRepo userRepo;
 
-    public AgnosUserController() {
+    public UserController() {
     }
 
     @GetMapping("/users")
-    Collection<AgnosDTOUser> users() {
-        return AgnosUserConverter.dao2dto(userRepo.findAll());
+    Collection<UserDTO> users() {
+        return UserConverter.dao2dto(userRepo.findAll());
     }
 
     @GetMapping("/user/{name}")
     ResponseEntity<?> getUser(@PathVariable String name) {
-        Optional<AgnosDTOUser> user = AgnosUserConverter.dao2dto(userRepo.findById(name));
+        Optional<UserDTO> user = UserConverter.dao2dto(userRepo.findById(name));
         return user.map(response -> ResponseEntity.ok().body(response))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("/user")
-    ResponseEntity<AgnosDTOUser> createUser(@Valid @RequestBody AgnosDTOUser user) throws URISyntaxException {
-        log.info("Request to create AgnosUser: {}", user);
-        AgnosDAOUser daoUser = AgnosUserConverter.dto2dao(user);
-        Optional<AgnosDTOUser> result = AgnosUserConverter.dao2dto(userRepo.save(daoUser));
+    ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO user) throws URISyntaxException {
+        log.info("Request to create AgnosUser: {}", user.getName());
+        User daoUser = UserConverter.dto2dao(user);
+        Optional<UserDTO> result = UserConverter.dao2dto(userRepo.save(daoUser));
         return ResponseEntity.created(new URI("/api/user/" + result.get().getName()))
                 .body(result.get());
     }
 
     @PutMapping("/user/{userName}")
-    ResponseEntity<AgnosDTOUser> updateUser(@Valid @RequestBody AgnosDTOUser user, @PathVariable String userName) {
+    ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO user, @PathVariable String userName) {
         log.info("Request to update AgnosUser: {}", user.getName());
-        AgnosDAOUser daoUser = AgnosUserConverter.dto2dao(user);
-        Optional<AgnosDTOUser> result = AgnosUserConverter.dao2dto(userRepo.save(userName, daoUser));
+        User daoUser = UserConverter.dto2dao(user);
+        Optional<UserDTO> result = UserConverter.dao2dto(userRepo.save(userName, daoUser));
         return ResponseEntity.ok().body(result.get());
     }
 

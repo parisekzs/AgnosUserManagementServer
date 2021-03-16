@@ -1,7 +1,7 @@
-package hu.mi.agnos.ums;
+package hu.mi.ums;
 
-import hu.mi.agnos.user.repository.AgnosRolePropertyRepository;
-import hu.mi.agnos.user.repository.AgnosUserPropertyRepository;
+import hu.mi.user.properties.repository.RoleRepo;
+import hu.mi.user.properties.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,14 +18,14 @@ public class AgnosUserManagementServerApplication {
     }
 
     @Bean
-    public AgnosUserPropertyRepository getUserPropertyRepository() {
-        AgnosUserPropertyRepository userRepo = new AgnosUserPropertyRepository(configurationURI);
+    public UserRepo getUserPropertyRepository() {
+        UserRepo userRepo = new UserRepo(configurationURI);
         return userRepo;
     }
 
         @Bean
-    public AgnosRolePropertyRepository getRolePropertyRepository() {
-        AgnosRolePropertyRepository roleRepo = new AgnosRolePropertyRepository(configurationURI);
+    public RoleRepo getRolePropertyRepository() {
+        RoleRepo roleRepo = new RoleRepo(configurationURI);
         return roleRepo;
     }
 
